@@ -1,0 +1,2490 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>iBank DS · Mobile Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ===== DESIGN TOKENS ===== */
+    :root {
+      --text-heading-large: 500 20px/26px 'Roboto', sans-serif;
+      --text-heading-medium: 500 18px/26px 'Roboto', sans-serif;
+      --text-body-large: 500 16px/24px 'Roboto', sans-serif;
+      --text-body-regular: 400 16px/24px 'Roboto', sans-serif;
+      --text-caption-large: 500 14px/20px 'Roboto', sans-serif;
+      --text-caption-regular: 400 14px/20px 'Roboto', sans-serif;
+      --text-caption-small: 400 12px/18px 'Roboto', sans-serif;
+
+      --color-bg: #FFFFFF;
+      --color-surface: #FFFFFF;
+      --color-sidebar-bg: #FFFFFF;
+      --color-white: #FFFFFF;
+      --color-text-primary: #353548;
+      --color-text-gray: #949BA6;
+      --color-text-disabled: #949BA6;
+      --color-primary: #14A551;
+      --color-divider: #DCE0E6;
+      --color-disabled-bg: #F5F7FA;
+      --color-warning: #FFA800;
+      --color-error: #DD2A4B;
+      --color-icon-disabled: #B8BCC2;
+      --color-icon-secondary: #949BA6;
+      --color-code-bg: #f6f8fa;
+      --color-code-tag: #0550ae;
+      --color-code-attr: #d73a49;
+      --color-code-value: #0a3069;
+      --color-code-text: #24292f;
+      --color-preview-line: #DCE0E6;
+      --color-overlay: rgba(0,0,0,0.4);
+
+      --space-2: 2px;
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-10: 10px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-full: 9999px;
+      --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mobile-width: 360px;
+      --content-width: 328px;
+      --touch-target-min: 48px;
+      --btn-height: 48px;
+      --input-height: 56px;
+      --field-sum-height: 64px;
+      --preview-field-height: 48px;
+      --sidebar-width: 264px;
+      --main-content-width: 885px;
+    }
+
+    /* ===== ТЁМНАЯ ТЕМА ===== */
+    [data-theme="dark"] {
+      --color-bg: #12121F;
+      --color-surface: #181825;
+      --color-sidebar-bg: #181825;
+      --color-white: #E0E0E0;
+      --color-text-primary: #E0E0E0;
+      --color-text-gray: #7A7A8A;
+      --color-text-disabled: #7A7A8A;
+      --color-primary: #1DB954;
+      --color-divider: #3A3A4F;
+      --color-disabled-bg: #2A2A3C;
+      --color-warning: #FFB800;
+      --color-error: #FF5252;
+      --color-icon-disabled: #5A5A6A;
+      --color-icon-secondary: #7A7A8A;
+      --color-code-bg: #2D2D3F;
+      --color-code-tag: #82AAFF;
+      --color-code-attr: #FF5370;
+      --color-code-value: #C3E88D;
+      --color-code-text: #E0E0E0;
+      --color-preview-line: #3A3A4F;
+      --color-overlay: rgba(0,0,0,0.7);
+    }
+
+    /* ===== BASE ===== */
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: var(--font-family);
+      color: var(--color-text-primary);
+      background: var(--color-bg);
+      line-height: 1.4;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button {
+      background: none;
+      border: none;
+      padding: 0;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      touch-action: manipulation;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* ===== LAYOUT ===== */
+    .app {
+      display: flex;
+      min-height: 100vh;
+      max-width: calc(var(--sidebar-width) + var(--main-content-width));
+      margin: 0 auto;
+      background: var(--color-bg);
+    }
+
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--color-sidebar-bg);
+      border-right: 1px solid var(--color-divider);
+      padding: var(--space-16);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .sidebar-header { margin-bottom: var(--space-24); }
+    .sidebar-header h2 {
+      font: var(--text-heading-large);
+      margin-bottom: var(--space-4);
+      color: var(--color-text-primary);
+    }
+    .sidebar-header .badge {
+      font: var(--text-caption-small);
+      color: var(--color-text-gray);
+    }
+
+    .sidebar-nav { display: flex; flex-direction: column; gap: var(--space-4); }
+
+    .nav-category {
+      font: var(--text-caption-small);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--color-text-gray);
+      padding: var(--space-12) 0 var(--space-4) 0;
+    }
+
+    .nav-item {
+      padding: var(--space-8) var(--space-12);
+      border-radius: var(--radius-md);
+      font: var(--text-body-regular);
+      color: var(--color-text-primary);
+      transition: background-color 0.1s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+    .nav-item:active { background-color: var(--color-disabled-bg); }
+    .nav-item.active {
+      background-color: var(--color-primary);
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .main {
+      flex: 1;
+      padding: var(--space-24);
+      width: var(--main-content-width);
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-24);
+      padding-bottom: var(--space-16);
+    }
+    .main-header h1 {
+      font: var(--text-heading-large);
+      margin: 0;
+    }
+    .main-header p {
+      font: var(--text-caption-regular);
+      color: var(--color-text-gray);
+      margin: 0;
+      max-width: 70%;
+    }
+
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      font-size: 18px;
+      color: var(--color-text-primary);
+      background: var(--color-disabled-bg);
+      border: 1px solid var(--color-divider);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      padding: 0 4px;
+      flex-shrink: 0;
+    }
+
+    /* ===== DEMO CARD & CONTAINERS ===== */
+    .demo-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-divider);
+      border-radius: var(--radius-xl);
+      padding: var(--space-24);
+      margin-bottom: var(--space-24);
+    }
+    .demo-title {
+      font: var(--text-heading-medium);
+      margin-bottom: var(--space-16);
+    }
+
+    .mobile-preview {
+      background: transparent;
+      border: 1px solid var(--color-divider);
+      border-radius: var(--radius-lg);
+      padding: var(--space-16);
+      margin: 0 auto var(--space-24) auto;
+    }
+    .mobile-preview-small { width: var(--mobile-width); }
+    .mobile-preview-wide { width: 560px; }
+
+    .component-container {
+      width: var(--content-width);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      min-height: 44px;
+    }
+    .control-state-label {
+      width: 140px;
+      font: var(--text-caption-regular);
+      color: var(--color-text-primary);
+      text-align: left;
+      flex-shrink: 0;
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: var(--btn-height);
+      padding: 0 var(--space-24);
+      border-radius: 10px;
+      font: var(--text-body-large);
+      background: var(--color-primary);
+      color: #fff;
+      border: none;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .btn:active {
+      background-color: #11A34F;
+    }
+    .btn:disabled, .btn.disabled {
+      background: var(--color-disabled-bg);
+      color: var(--color-text-disabled);
+      pointer-events: none;
+    }
+
+    .btn-secondary {
+      background: var(--color-disabled-bg);
+      color: var(--color-text-primary);
+      border: none;
+    }
+    .btn-secondary:active {
+      background: #EDF0F4;
+    }
+
+    .btn-short {
+      width: 115px;
+      height: var(--btn-height);
+      border-radius: 10px;
+      font: var(--text-body-large);
+      padding: 0 var(--space-12);
+    }
+    .btn-short-primary {
+      background: var(--color-primary);
+      color: #fff;
+    }
+    .btn-short-primary:active {
+      background: #11A34F;
+    }
+    .btn-short-secondary {
+      background: var(--color-disabled-bg);
+      color: var(--color-text-primary);
+    }
+    .btn-short-secondary:active {
+      background: #EDF0F4;
+    }
+    .btn-short-pair {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .btn-product {
+      width: 160px;
+      height: 56px;
+      border-radius: 10px;
+      font: var(--text-body-large);
+      background: var(--color-disabled-bg);
+      color: var(--color-text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-product:active {
+      background: #EDF0F4;
+    }
+    .btn-product-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: #fff;
+      font-size: 14px;
+    }
+    .btn-product-pair {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .sbp-banner {
+      width: 360px;
+      height: 80px;
+      background: #fff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font: var(--text-body-large);
+      color: var(--color-text-primary);
+      border: 1px solid var(--color-divider);
+      margin-top: 4px;
+      pointer-events: none;
+    }
+    .sbp-banner .icon {
+      font-size: 24px;
+    }
+
+    /* ===== INPUTS ===== */
+    .floating-group { position: relative; width: 100%; }
+    .floating-input {
+      width: 100%;
+      height: var(--input-height);
+      padding: 18px var(--space-16) 6px var(--space-16);
+      border: 1px solid var(--color-divider);
+      border-radius: var(--radius-md);
+      font: var(--text-body-regular);
+      color: var(--color-text-primary);
+      background: var(--color-surface);
+      outline: none;
+      transition: border-color 0.1s;
+    }
+    .floating-input:focus { border-color: var(--color-primary); }
+    .floating-input:disabled {
+      background: var(--color-disabled-bg);
+      color: var(--color-text-disabled);
+      border-color: var(--color-divider);
+    }
+    .floating-input.error { border-color: var(--color-error); }
+    .floating-input.error:focus { border-color: var(--color-error); }
+    .floating-input-sum {
+      height: var(--field-sum-height);
+      font-size: 20px;
+      font-weight: 500;
+      padding: 24px var(--space-16) 12px var(--space-16);
+    }
+    .floating-label {
+      position: absolute;
+      left: var(--space-16);
+      top: 50%;
+      transform: translateY(-50%);
+      font: var(--text-body-regular);
+      color: var(--color-text-gray);
+      pointer-events: none;
+      transition: all 0.15s ease;
+    }
+    .floating-input:focus ~ .floating-label,
+    .floating-input:not(:placeholder-shown) ~ .floating-label {
+      top: 8px;
+      transform: translateY(0);
+      font: var(--text-caption-small);
+      color: var(--color-text-gray);
+    }
+    .floating-input:focus ~ .floating-label { color: var(--color-primary); }
+    .floating-input.error:focus ~ .floating-label,
+    .floating-input.error:not(:placeholder-shown) ~ .floating-label { color: var(--color-error); }
+    .floating-input-sum ~ .floating-label { font-size: 16px; }
+    .floating-input-sum:focus ~ .floating-label,
+    .floating-input-sum:not(:placeholder-shown) ~ .floating-label {
+      top: 10px;
+      font: var(--text-caption-small);
+    }
+
+    .preview-field-wrapper { width: 100%; }
+    .preview-label {
+      font: var(--text-caption-small);
+      color: var(--color-text-gray);
+      margin-bottom: var(--space-2);
+    }
+    .preview-text {
+      font: var(--text-body-regular);
+      color: var(--color-text-primary);
+      padding-bottom: 7px;
+      border-bottom: 1px solid var(--color-preview-line);
+    }
+
+    .text-error {
+      font: var(--text-caption-regular);
+      color: var(--color-error);
+      margin-top: var(--space-4);
+    }
+
+    /* ===== SELECTION ===== */
+    .checkbox-input, .radio-input { display: none; }
+
+    .checkbox-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border: 1.5px solid #C6C6C8;
+      background-color: transparent;
+      cursor: pointer;
+      transition: background-color 0.1s, border-color 0.1s;
+      flex-shrink: 0;
+      border-radius: 6px;
+    }
+
+    .radio-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border: 1px solid #C6C6C8;
+      background-color: transparent;
+      cursor: pointer;
+      transition: background-color 0.1s, border-color 0.1s;
+      flex-shrink: 0;
+      border-radius: 50%;
+    }
+
+    .checkbox-input:checked + .checkbox-label {
+      background-color: var(--color-primary);
+      border-color: var(--color-primary);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-6' stroke='white' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 12px 12px;
+    }
+
+    .checkbox-input:disabled + .checkbox-label {
+      border-color: #E0E0E0;
+      background-color: transparent;
+      cursor: not-allowed;
+    }
+
+    .checkbox-input:disabled:checked + .checkbox-label {
+      background-color: #E0E0E0;
+      border-color: #E0E0E0;
+      opacity: 0.6;
+    }
+
+    .radio-input:checked + .radio-label {
+      border-color: var(--color-primary);
+      background-color: transparent;
+      background-image: radial-gradient(circle, var(--color-primary) 38%, transparent 39%);
+    }
+
+    .radio-input:disabled + .radio-label {
+      border-color: #E0E0E0;
+      background-color: transparent;
+      cursor: not-allowed;
+    }
+
+    .radio-input:disabled:checked + .radio-label {
+      border-color: #E0E0E0;
+      background-image: radial-gradient(circle, #E0E0E0 38%, transparent 39%);
+    }
+
+    .switch-input { display: none; }
+    .switch-label {
+      position: relative;
+      display: inline-block;
+      width: 36px;
+      height: 20px;
+      background-color: #E5E5EA;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      flex-shrink: 0;
+    }
+    .switch-label::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      background-color: white;
+      border-radius: 50%;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .switch-input:checked + .switch-label { background-color: var(--color-primary); }
+    .switch-input:checked + .switch-label::after { transform: translateX(16px); }
+    .switch-input:disabled + .switch-label { background-color: #F0F0F0; opacity: 0.6; cursor: not-allowed; }
+    .switch-input:disabled:checked + .switch-label { background-color: #D1D1D6; opacity: 0.6; }
+
+    /* ===== TAB BAR ===== */
+    .tab-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      border-bottom: 1px solid var(--color-divider);
+    }
+
+    .tab-item {
+      position: relative;
+      padding: var(--space-12) 0;
+      font: var(--text-body-regular);
+      color: var(--color-text-gray);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.1s;
+    }
+
+    .tab-item.active {
+      font: var(--text-body-large);
+      color: var(--color-primary);
+    }
+
+    .tab-item.active::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 2px;
+      background-color: var(--color-primary);
+    }
+
+    /* ===== PRODUCT SELECT ===== */
+    .product-select-wrapper {
+      width: var(--content-width);
+      margin: 0 auto;
+    }
+
+    .product-select-label {
+      font: var(--text-caption-regular);
+      color: var(--color-text-gray);
+      margin-bottom: var(--space-4);
+    }
+
+    .product-select {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 64px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-divider);
+      border-radius: 6px;
+      padding: 9px 16px;
+      cursor: pointer;
+      transition: border-color 0.1s, background-color 0.1s;
+      position: relative;
+    }
+
+    .product-select:focus-within {
+      border-color: var(--color-primary);
+      outline: none;
+    }
+
+    .product-select.focus {
+      border-color: var(--color-primary);
+    }
+
+    .product-select.error {
+      border-color: var(--color-error);
+    }
+
+    .product-select.disabled {
+      background: var(--color-disabled-bg);
+      border-color: var(--color-divider);
+      cursor: not-allowed;
+      opacity: 1;
+    }
+
+    .product-select .icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: #FFFFFF;
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-right: 12px;
+    }
+
+    .product-select .info {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .product-select .name {
+      font: var(--text-caption-small);
+      color: var(--color-text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .product-select .amount {
+      font: var(--text-body-large);
+      color: var(--color-text-primary);
+      margin-top: var(--space-2);
+    }
+
+    .product-select .amount .kopecks,
+    .product-select .amount .currency {
+      color: var(--color-text-gray);
+    }
+
+    .product-select .arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      margin-left: 8px;
+      transition: transform 0.2s;
+    }
+
+    .product-select .arrow svg {
+      width: 12px;
+      height: 8px;
+      fill: var(--color-divider);
+    }
+
+    .product-select.open .arrow {
+      transform: rotate(180deg);
+    }
+
+    /* ===== DROPDOWNS ===== */
+    .dropdown-wrapper {
+      width: var(--content-width);
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .dropdown-field {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 64px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-divider);
+      border-radius: 6px;
+      padding: 9px 16px;
+      cursor: pointer;
+      transition: border-color 0.1s;
+    }
+
+    .dropdown-field:focus-within {
+      border-color: var(--color-primary);
+      outline: none;
+    }
+
+    .dropdown-field .icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: #FFFFFF;
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-right: 12px;
+    }
+
+    .dropdown-field .info {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .dropdown-field .name {
+      font: var(--text-caption-small);
+      color: var(--color-text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dropdown-field .amount {
+      font: var(--text-body-large);
+      color: var(--color-text-primary);
+      margin-top: var(--space-2);
+    }
+
+    .dropdown-field .amount .kopecks,
+    .dropdown-field .amount .currency {
+      color: var(--color-text-gray);
+    }
+
+    .dropdown-field .arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      margin-left: 8px;
+      transition: transform 0.2s;
+    }
+
+    .dropdown-field .arrow svg {
+      width: 12px;
+      height: 8px;
+      fill: var(--color-divider);
+    }
+
+    .dropdown-field.open .arrow {
+      transform: rotate(180deg);
+    }
+
+    .dropdown-content {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      width: 100%;
+      background: var(--color-surface);
+      border: 1px solid var(--color-divider);
+      border-radius: 6px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      display: none;
+      flex-direction: column;
+      z-index: 10;
+      overflow: hidden;
+    }
+
+    .dropdown-content.open {
+      display: flex;
+      height: 200px;
+    }
+
+    .dropdown-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 20px 4px 0;
+    }
+
+    .dropdown-list::-webkit-scrollbar {
+      width: 20px;
+    }
+
+    .dropdown-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .dropdown-list::-webkit-scrollbar-thumb {
+      background: var(--color-divider);
+      border-radius: 999px;
+      height: 32px;
+      border: 8px solid transparent;
+      background-clip: content-box;
+    }
+
+    /* Product Dropdown Item */
+    .dropdown-item-product {
+      display: flex;
+      align-items: center;
+      width: 308px;
+      height: 52px;
+      background: var(--color-surface);
+      padding: 5px 16px;
+      margin: 0 auto 4px auto;
+      cursor: pointer;
+      transition: background-color 0.1s;
+    }
+
+    .dropdown-item-product:last-child {
+      margin-bottom: 0;
+    }
+
+    .dropdown-item-product:hover {
+      background: var(--color-disabled-bg);
+    }
+
+    .dropdown-item-product .icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: #FFFFFF;
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-right: 12px;
+    }
+
+    .dropdown-item-product .info {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .dropdown-item-product .name {
+      font: var(--text-caption-small);
+      color: var(--color-text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dropdown-item-product .amount {
+      font: var(--text-body-large);
+      color: var(--color-text-primary);
+      margin-top: var(--space-2);
+    }
+
+    .dropdown-item-product .amount .kopecks,
+    .dropdown-item-product .amount .currency {
+      color: var(--color-text-gray);
+    }
+
+    /* Icon+Text Dropdown Item */
+    .dropdown-item-icon-text {
+      display: flex;
+      align-items: center;
+      width: 308px;
+      height: 56px;
+      background: var(--color-surface);
+      padding: 5px 16px;
+      margin: 0 auto 4px auto;
+      cursor: pointer;
+      transition: background-color 0.1s;
+    }
+
+    .dropdown-item-icon-text:last-child {
+      margin-bottom: 0;
+    }
+
+    .dropdown-item-icon-text:hover {
+      background: var(--color-disabled-bg);
+    }
+
+    .dropdown-item-icon-text .icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      margin-right: 12px;
+    }
+
+    .dropdown-item-icon-text .icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .dropdown-item-icon-text .text {
+      font: var(--text-body-regular);
+      color: var(--color-text-primary);
+      flex: 1;
+    }
+
+    /* Text Dropdown Item */
+    .dropdown-item-text {
+      display: flex;
+      align-items: center;
+      width: 308px;
+      height: 36px;
+      background: var(--color-surface);
+      padding: 0 16px;
+      margin: 0 auto 4px auto;
+      cursor: pointer;
+      transition: background-color 0.1s;
+    }
+
+    .dropdown-item-text:last-child {
+      margin-bottom: 0;
+    }
+
+    .dropdown-item-text:hover {
+      background: var(--color-disabled-bg);
+    }
+
+    .dropdown-item-text .text {
+      font: var(--text-body-regular);
+      color: var(--color-text-primary);
+      flex: 1;
+    }
+
+    /* Icon+Text Select Field */
+    .dropdown-icon-text-field {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 64px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-divider);
+      border-radius: 6px;
+      padding: 0 16px;
+      cursor: pointer;
+      transition: border-color 0.1s;
+    }
+
+    .dropdown-icon-text-field:focus-within {
+      border-color: var(--color-primary);
+      outline: none;
+    }
+
+    .dropdown-icon-text-field .placeholder {
+      font: var(--text-body-regular);
+      color: var(--color-text-disabled);
+      flex: 1;
+    }
+
+    .dropdown-icon-text-field .icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      margin-right: 12px;
+    }
+
+    .dropdown-icon-text-field .icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .dropdown-icon-text-field .text {
+      font: var(--text-body-regular);
+      color: var(--color-text-primary);
+      flex: 1;
+    }
+
+    .dropdown-icon-text-field .arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      margin-left: 8px;
+      transition: transform 0.2s;
+    }
+
+    .dropdown-icon-text-field .arrow svg {
+      width: 12px;
+      height: 8px;
+      fill: var(--color-divider);
+    }
+
+    .dropdown-icon-text-field.open .arrow {
+      transform: rotate(180deg);
+    }
+
+    /* Text Select Field */
+    .dropdown-text-field {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 64px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-divider);
+      border-radius: 6px;
+      padding: 0 16px;
+      cursor: pointer;
+      transition: border-color 0.1s;
+    }
+
+    .dropdown-text-field:focus-within {
+      border-color: var(--color-primary);
+      outline: none;
+    }
+
+    .dropdown-text-field .placeholder {
+      font: var(--text-body-regular);
+      color: var(--color-text-disabled);
+      flex: 1;
+    }
+
+    .dropdown-text-field .text {
+      font: var(--text-body-regular);
+      color: var(--color-text-primary);
+      flex: 1;
+    }
+
+    .dropdown-text-field .arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      margin-left: 8px;
+      transition: transform 0.2s;
+    }
+
+    .dropdown-text-field .arrow svg {
+      width: 12px;
+      height: 8px;
+      fill: var(--color-divider);
+    }
+
+    .dropdown-text-field.open .arrow {
+      transform: rotate(180deg);
+    }
+
+    /* ===== MODALS ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0.2s, opacity 0.2s;
+      /* Убрали background: var(--color-overlay) — затемнение убрано */
+    }
+    .modal-overlay.open {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .modal {
+      width: var(--content-width);
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      padding: var(--space-24) var(--space-16);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    .modal-icon-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: var(--space-16);
+    }
+    .warning-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-full);
+      background: var(--color-warning);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .modal-title {
+      font: var(--text-heading-medium);
+      margin-bottom: var(--space-8);
+      text-align: center;
+    }
+
+    .modal-text {
+      font: var(--text-caption-regular);
+      color: var(--color-text-gray);
+      text-align: center;
+      margin-bottom: var(--space-16);
+      line-height: 1.5;
+    }
+
+    .modal-actions-row {
+      display: flex;
+      gap: var(--space-12);
+    }
+
+    .modal-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 48px;
+      border-radius: var(--radius-md);
+      font: var(--text-body-large);
+    }
+    .modal-btn.primary {
+      background: var(--color-primary);
+      color: var(--color-white);
+    }
+    .modal-btn.primary:active { filter: brightness(0.9); }
+    .modal-btn.secondary {
+      background: var(--color-surface);
+      color: var(--color-primary);
+      border: 1px solid var(--color-primary);
+    }
+    .modal-btn.secondary:active { background: var(--color-disabled-bg); }
+    .modal-btn.ghost {
+      background: transparent;
+      color: var(--color-text-primary);
+      font-weight: 400;
+    }
+
+    .driver-sheet {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 360px;
+      background: var(--color-surface);
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      padding: var(--space-24) var(--space-16);
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.1);
+      visibility: hidden;
+      transform: translateX(-50%) translateY(100%);
+      transition: transform 0.3s ease, visibility 0.3s;
+      z-index: 1001;
+    }
+    .driver-sheet.open {
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .driver-title {
+      font: var(--text-heading-medium);
+      margin-bottom: var(--space-24);
+    }
+
+    .driver-list {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .driver-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      font: var(--text-body-regular);
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .driver-item-icon {
+      font-size: 20px;
+      width: 24px;
+      text-align: center;
+    }
+
+    /* ===== MISC ===== */
+    .states-panel {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-8);
+      align-items: center;
+      justify-content: center;
+      margin-top: var(--space-16);
+    }
+    .state-btn {
+      padding: var(--space-8) var(--space-16);
+      background: var(--color-surface);
+      border: 1px solid var(--color-divider);
+      border-radius: var(--radius-md);
+      font: var(--text-caption-regular);
+      color: var(--color-text-primary);
+      min-width: 80px;
+      text-align: center;
+      transition: all 0.1s;
+      cursor: pointer;
+    }
+    .state-btn:active { background-color: var(--color-disabled-bg); }
+    .state-btn.active {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #fff;
+    }
+
+    .variant-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--color-divider);
+      margin-bottom: var(--space-16);
+      gap: 8px;
+    }
+    .variant-tab {
+      padding: var(--space-8) var(--space-16);
+      font: var(--text-caption-large);
+      color: var(--color-text-gray);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      background: none;
+      transition: color 0.1s, border-color 0.1s;
+    }
+    .variant-tab.active {
+      color: var(--color-primary);
+      border-bottom-color: var(--color-primary);
+    }
+    .variant-content {
+      display: none;
+    }
+    .variant-content.active {
+      display: block;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--color-divider);
+      margin-bottom: var(--space-16);
+    }
+    .tab {
+      padding: var(--space-8) var(--space-16);
+      font: var(--text-caption-large);
+      color: var(--color-text-gray);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+    .tab.active {
+      color: var(--color-primary);
+      border-bottom-color: var(--color-primary);
+    }
+
+    .code-block {
+      background: var(--color-code-bg);
+      color: var(--color-code-text);
+      padding: var(--space-16);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-top: var(--space-16);
+      border: 1px solid var(--color-divider);
+    }
+    .code-block .tag { color: var(--color-code-tag); }
+    .code-block .attr { color: var(--color-code-attr); }
+    .code-block .value { color: var(--color-code-value); }
+    .code-block .text { color: var(--color-code-text); }
+    .code-block .comment { color: #6a737d; font-style: italic; }
+
+    @media (max-width: 1149px) {
+      .app { max-width: 100%; }
+      .main { width: auto; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>iBank DS</h2>
+      <div class="badge">v1.0 · Mobile</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-category">Core</div>
+      <div class="nav-item" data-component="button">Button</div>
+      <div class="nav-item" data-component="input">Input</div>
+      <div class="nav-item" data-component="selection">Selection</div>
+      <div class="nav-category">Forms</div>
+      <div class="nav-item active" data-component="product-select">Product Select</div>
+      <div class="nav-item" data-component="dropdowns">Dropdowns</div>
+      <div class="nav-category">Navigation</div>
+      <div class="nav-item" data-component="tabbar">Tab Bar</div>
+      <div class="nav-item" data-component="header">Header</div>
+      <div class="nav-category">Cards</div>
+      <div class="nav-item" data-component="product-card">Product Card</div>
+      <div class="nav-item" data-component="action-card">Action Card</div>
+      <div class="nav-category">Feedback</div>
+      <div class="nav-item" data-component="modals">Modals</div>
+      <div class="nav-item" data-component="toast">Toast</div>
+    </nav>
+    <div style="margin-top: var(--space-24); font-size: 12px; color: var(--color-text-gray);">
+      <div>Screen width: 360px</div>
+      <div>Content width: 328px</div>
+      <div>Roboto, no shadows</div>
+    </div>
+  </aside>
+  
+  <main class="main">
+    <div class="main-header">
+      <div>
+        <h1 id="component-title">Product Select</h1>
+        <p id="component-description">Поле выбора продукта для экранов платежей и переводов.</p>
+      </div>
+      <button class="theme-toggle" id="theme-toggle">🌙</button>
+    </div>
+    
+    <div id="demo-container"></div>
+  </main>
+</div>
+
+<script>
+  (function(){
+    const navItems = document.querySelectorAll('.nav-item');
+    const componentTitle = document.getElementById('component-title');
+    const componentDescription = document.getElementById('component-description');
+    const demoContainer = document.getElementById('demo-container');
+
+    function highlightedCode(code) {
+      return code
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/(&lt;\/?[\w]+)/g, '<span class="tag">$1</span>')
+        .replace(/([\w-]+)=(".*?")/g, '<span class="attr">$1</span>=<span class="value">$2</span>')
+        .replace(/(&lt;!--[\s\S]*?--&gt;)/g, '<span class="comment">$1</span>');
+    }
+
+    // Theme toggle
+    const html = document.documentElement;
+    const themeToggle = document.getElementById('theme-toggle');
+    function setTheme(theme) {
+      html.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+    }
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
+    themeToggle.addEventListener('click', () => {
+      const current = html.getAttribute('data-theme');
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    });
+
+    // ========== RENDERERS ==========
+    const renderers = {
+
+      // ----- BUTTON -----
+      button: () => {
+        componentTitle.textContent = 'Button';
+        componentDescription.textContent = 'Кнопка. Используется, когда человеку нужно сделать выбор, подтвердить или совершить какое-то действие.';
+
+        demoContainer.innerHTML = `
+          <div class="demo-card">
+            <div class="demo-title">Playground</div>
+            <div class="variant-tabs">
+              <button type="button" class="variant-tab active" data-variant="primary">Primary</button>
+              <button type="button" class="variant-tab" data-variant="secondary">Secondary</button>
+              <button type="button" class="variant-tab" data-variant="short">Short</button>
+              <button type="button" class="variant-tab" data-variant="product">Product Actions</button>
+              <button type="button" class="variant-tab" data-variant="sbp">SBP Banner</button>
+            </div>
+            <div class="variant-description" id="variant-description">Primary — основная кнопка для главного действия (оплатить, продолжить).</div>
+
+            <!-- Primary -->
+            <div id="variant-primary" class="variant-content">
+              <div class="mobile-preview mobile-preview-small">
+                <div class="component-container">
+                  <button class="btn" id="primary-demo">Продолжить</button>
+                </div>
+              </div>
+              <div class="states-panel">
+                <button class="state-btn active" data-state="default" data-target="primary">Default</button>
+                <button class="state-btn" data-state="pressed" data-target="primary">Pressed</button>
+                <button class="state-btn" data-state="disabled" data-target="primary">Disabled</button>
+              </div>
+            </div>
+
+            <!-- Secondary -->
+            <div id="variant-secondary" class="variant-content" style="display:none;">
+              <div class="mobile-preview mobile-preview-small">
+                <div class="component-container">
+                  <button class="btn btn-secondary" id="secondary-demo">Отмена</button>
+                </div>
+              </div>
+              <div class="states-panel">
+                <button class="state-btn active" data-state="default" data-target="secondary">Default</button>
+                <button class="state-btn" data-state="pressed" data-target="secondary">Pressed</button>
+                <button class="state-btn" data-state="disabled" data-target="secondary">Disabled</button>
+              </div>
+            </div>
+
+            <!-- Short (pair) -->
+            <div id="variant-short" class="variant-content" style="display:none;">
+              <div class="mobile-preview mobile-preview-small">
+                <div class="component-container" style="gap: 16px;">
+                  <div class="btn-short-pair">
+                    <button class="btn-short btn-short-primary">Да</button>
+                    <button class="btn-short btn-short-secondary">Нет</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Product Actions (pair with icons) -->
+            <div id="variant-product" class="variant-content" style="display:none;">
+              <div class="mobile-preview mobile-preview-small">
+                <div class="btn-product-pair">
+                  <button class="btn-product">
+                    <span class="btn-product-icon">→</span> Перевести
+                  </button>
+                  <button class="btn-product">
+                    <span class="btn-product-icon">+</span> Пополнить
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- SBP Banner (non-clickable info plate) -->
+            <div id="variant-sbp" class="variant-content" style="display:none;">
+              <div class="mobile-preview mobile-preview-small" style="padding: 0; border: none;">
+                <div class="sbp-banner">
+                  <span class="icon">💳</span>
+                  <span>СБП</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="tabs" style="margin-top: var(--space-24);">
+              <button type="button" class="tab active" data-tab="design">Дизайн</button>
+              <button type="button" class="tab" data-tab="code">Код</button>
+            </div>
+            <div id="tab-design" class="tab-content">
+              <p style="font-size:14px; margin-top:16px;">Все кнопки имеют border-radius 10px, шрифт 16 medium. Primary: 328×48px, фон primary, текст белый. Secondary: 328×48px, фон disabled, текст primary. Short: 115×48px (пара, отступ 16px). Product: 160×56px (пара, отступ 8px), иконка на зелёном круге. SBP Banner: 360×80px, некликабельная информационная плашка.</p>
+            </div>
+            <div id="tab-code" class="tab-content" style="display:none;">
+              <div class="code-block">${highlightedCode(
+                '<!-- Primary -->\n<button class="btn">Продолжить</button>\n\n<!-- Secondary -->\n<button class="btn btn-secondary">Отмена</button>\n\n<!-- Short pair -->\n<div class="btn-short-pair">\n  <button class="btn-short btn-short-primary">Да</button>\n  <button class="btn-short btn-short-secondary">Нет</button>\n</div>\n\n<!-- Product Actions -->\n<div class="btn-product-pair">\n  <button class="btn-product">\n    <span class="btn-product-icon">→</span> Перевести\n  </button>\n  <button class="btn-product">\n    <span class="btn-product-icon">+</span> Пополнить\n  </button>\n</div>\n\n<!-- SBP Banner -->\n<div class="sbp-banner">\n  <span class="icon">💳</span>\n  <span>СБП</span>\n</div>'
+              )}</div>
+            </div>
+          </div>
+        `;
+
+        const variantTabs = document.querySelectorAll('.variant-tab');
+        const variantDesc = document.getElementById('variant-description');
+        variantTabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const variant = tab.dataset.variant;
+            variantTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.querySelectorAll('.variant-content').forEach(el => el.style.display = 'none');
+            document.getElementById('variant-' + variant).style.display = 'block';
+            if (variantDesc) {
+              const descriptions = {
+                primary: 'Primary — основная кнопка для главного действия (оплатить, продолжить).',
+                secondary: 'Secondary — второстепенная кнопка для отмены или альтернативных действий.',
+                short: 'Short — короткие кнопки (Да/Нет) для модальных окон. Ширина 115px, отступ между парой 16px.',
+                product: 'Product Actions — кнопки действий по продукту (Перевести/Пополнить). Ширина 160px, высота 56px, отступ между парой 8px.',
+                sbp: 'SBP Banner — информационная плашка СБП, некликабельная. Ширина 360px, высота 80px.'
+              };
+              variantDesc.textContent = descriptions[variant] || '';
+            }
+          });
+        });
+
+        function updateButton(state, target) {
+          const btn = document.getElementById(target === 'primary' ? 'primary-demo' : 'secondary-demo');
+          if (!btn) return;
+          btn.className = target === 'primary' ? 'btn' : 'btn btn-secondary';
+          btn.disabled = false;
+          btn.style.backgroundColor = '';
+          if (state === 'pressed') {
+            btn.style.backgroundColor = target === 'primary' ? '#11A34F' : '#EDF0F4';
+          } else if (state === 'disabled') {
+            btn.disabled = true;
+          }
+        }
+
+        document.querySelectorAll('.state-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const panel = btn.parentElement;
+            panel.querySelectorAll('.state-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            updateButton(btn.dataset.state, btn.dataset.target);
+          });
+        });
+
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const tabName = tab.dataset.tab;
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById('tab-design').style.display = tabName === 'design' ? 'block' : 'none';
+            document.getElementById('tab-code').style.display = tabName === 'code' ? 'block' : 'none';
+          });
+        });
+
+        // Принудительно открываем первый вариант (Primary)
+        const firstTab = document.querySelector('#demo-container .variant-tab');
+        if (firstTab) {
+          firstTab.click();
+        }
+      },
+
+      // ----- INPUT -----
+      input: () => {
+        componentTitle.textContent = 'Input';
+        componentDescription.textContent = 'Поле ввода. Позволяет пользователю вводить текст или числа. Используется в формах, для поиска, ввода пароля, суммы.';
+
+        const inputVariants = {
+          text: 'Text — стандартное поле ввода текста высотой 56px. С плавающим лейблом.',
+          sum: 'Sum — поле для ввода суммы, высота 64px, шрифт увеличенный.',
+          preview: 'Preview — нередактируемое поле с подчёркиванием. Лейбл (12px), текст (16px) и линия (1px, #DCE0E6, отступ 7px).',
+        };
+
+        demoContainer.innerHTML = `
+          <div class="demo-card">
+            <div class="demo-title">Variants</div>
+            <div class="variant-tabs">
+              <button type="button" class="variant-tab active" data-variant="text">Text</button>
+              <button type="button" class="variant-tab" data-variant="sum">Sum</button>
+              <button type="button" class="variant-tab" data-variant="preview">Preview</button>
+            </div>
+            <div class="variant-description" id="variant-description">${inputVariants.text}</div>
+
+            <div id="variant-text" class="variant-content">
+              <div class="mobile-preview mobile-preview-wide">
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                  <div class="control-row">
+                    <span class="control-state-label">Default</span>
+                    <div class="floating-group" style="width: 328px; flex: none;">
+                      <input type="text" class="floating-input" placeholder=" ">
+                      <label class="floating-label">Логин</label>
+                    </div>
+                  </div>
+                  <div class="control-row">
+                    <span class="control-state-label">Focused</span>
+                    <div class="floating-group" style="width: 328px; flex: none;">
+                      <input type="text" class="floating-input" placeholder=" " autofocus>
+                      <label class="floating-label">Логин</label>
+                    </div>
+                  </div>
+                  <div class="control-row">
+                    <span class="control-state-label">Filled</span>
+                    <div class="floating-group" style="width: 328px; flex: none;">
+                      <input type="text" class="floating-input" placeholder=" " value="testname@bifit.com">
+                      <label class="floating-label">Логин</label>
+                    </div>
+                  </div>
+                  <div class="control-row">
+                    <span class="control-state-label">Error</span>
+                    <div style="width: 328px; flex: none;">
+                      <div class="floating-group">
+                        <input type="text" class="floating-input error" placeholder=" " value="Неверное значение" autofocus>
+                        <label class="floating-label">Пароль</label>
+                      </div>
+                      <div class="text-error">Неверный формат</div>
+                    </div>
+                  </div>
+                  <div class="control-row">
+                    <span class="control-state-label">Disabled</span>
+                    <div class="floating-group" style="width: 328px; flex: none;">
+                      <input type="text" class="floating-input" placeholder=" " disabled value="Не редактируется">
+                      <label class="floating-label">Город</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="variant-sum" class="variant-content" style="display:none;">
+              <div class="mobile-preview mobile-preview-wide">
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                  <div class="control-row">
+                    <span class="control-state-label">Default</span>
+                    <div class="floating-group" style="width: 328px; flex: none;">
+                      <input type="text" class="floating-input floating-input-sum" placeholder=" ">
+                      <label class="floating-label">Сумма</label>
+                    </div>
+                  </div>
+                  <div class="control-row">
+                    <span class="control-state-label">Filled</span>
+                    <div class="floating-group" style="width: 328px; flex: none;">
+                      <input type="text" class="floating-input floating-input-sum" placeholder=" " value="12 000 ₽">
+                      <label class="floating-label">Сумма</label>
+                    </div>
+                  </div>
+                  <div class="control-row">
+                    <span class="control-state-label">Error</span>
+                    <div style="width: 328px; flex: none;">
+                      <div class="floating-group">
+                        <input type="text" class="floating-input floating-input-sum error" placeholder=" " value="abc" autofocus>
+                        <label class="floating-label">Сумма</label>
+                      </div>
+                      <div class="text-error">Введите число</div>
+                    </div>
+                  </div>
+                  <div class="control-row">
+                    <span class="control-state-label">Disabled</span>
+                    <div class="floating-group" style="width: 328px; flex: none;">
+                      <input type="text" class="floating-input floating-input-sum" placeholder=" " disabled value="500 000 ₽">
+                      <label class="floating-label">Сумма</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="variant-preview" class="variant-content" style="display:none;">
+              <div class="mobile-preview mobile-preview-wide">
+                <div style="display: flex; flex-direction: column; gap: 24px;">
+                  <div class="control-row">
+                    <span class="control-state-label">Default</span>
+                    <div class="preview-field-wrapper" style="width: 328px; flex: none;">
+                      <div class="preview-label">Счет списания</div>
+                      <div class="preview-text">75A533214351-051-213</div>
+                    </div>
+                  </div>
+                  <div class="control-row">
+                    <span class="control-state-label">Disabled</span>
+                    <div class="preview-field-wrapper" style="width: 328px; flex: none;">
+                      <div class="preview-label">Счет списания</div>
+                      <div class="preview-text" style="color: var(--color-text-gray); border-bottom-color: var(--color-divider);">Нет доступных счетов</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tabs" style="margin-top: var(--space-24);">
+              <button type="button" class="tab active" data-tab="design">Дизайн</button>
+              <button type="button" class="tab" data-tab="code">Код</button>
+            </div>
+            <div id="tab-design" class="tab-content">
+              <p style="font-size:14px; margin-top:16px;">Обычное поле 56px, поле суммы 64px, предпросмотр — текст с линией.</p>
+            </div>
+            <div id="tab-code" class="tab-content" style="display:none;">
+              <div class="code-block">${highlightedCode(
+                '<!-- Text field -->\n<div class="floating-group">\n  <input type="text" class="floating-input" placeholder=" ">\n  <label class="floating-label">Логин</label>\n</div>\n\n<!-- Preview -->\n<div class="preview-field-wrapper">\n  <div class="preview-label">Счет списания</div>\n  <div class="preview-text">75A5...</div>\n</div>'
+              )}</div>
+            </div>
+          </div>
+        `;
+
+        const variantTabs = document.querySelectorAll('.variant-tab');
+        const variantDesc = document.getElementById('variant-description');
+        variantTabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const variant = tab.dataset.variant;
+            variantTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.querySelectorAll('.variant-content').forEach(el => el.style.display = 'none');
+            document.getElementById('variant-' + variant).style.display = 'block';
+            if (variantDesc) variantDesc.textContent = inputVariants[variant] || '';
+          });
+        });
+
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const tabName = tab.dataset.tab;
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById('tab-design').style.display = tabName === 'design' ? 'block' : 'none';
+            document.getElementById('tab-code').style.display = tabName === 'code' ? 'block' : 'none';
+          });
+        });
+
+        // Принудительно открываем первый вариант (Text)
+        const firstTab = document.querySelector('#demo-container .variant-tab');
+        if (firstTab) {
+          firstTab.click();
+        }
+      },
+
+      // ----- SELECTION -----
+      selection: () => {
+        componentTitle.textContent = 'Selection';
+        componentDescription.textContent = 'Элементы выбора. Позволяют пользователю выбрать один или несколько вариантов из предложенных. Включают чекбоксы, радиокнопки и переключатели.';
+
+        const variantDescriptions = {
+          checkbox: 'Checkbox — флажок для множественного выбора. Квадрат 20×20, обводка 1.5px, скругление 6px. Активный — зелёный фон с белой галочкой.',
+          radio: 'Radio — радиокнопка для выбора одного значения. Круг 20×20, обводка 1px. Активный — зелёная обводка и внутренняя точка.',
+          switch: 'Switch — переключатель для включения/выключения опции. Трек 36×20, тумблер 16px. Активный трек — зелёный.',
+        };
+
+        const generateCheckboxHTML = (type) => {
+          const inputType = type === 'radio' ? 'radio' : 'checkbox';
+          const className = type === 'radio' ? 'radio' : 'checkbox';
+          return `
+            <div class="control-row">
+              <span class="control-state-label">Default</span>
+              <input type="${inputType}" class="${className}-input" id="${type}_def">
+              <label for="${type}_def" class="${className}-label"></label>
+            </div>
+            <div class="control-row">
+              <span class="control-state-label">Selected</span>
+              <input type="${inputType}" class="${className}-input" id="${type}_sel" checked>
+              <label for="${type}_sel" class="${className}-label"></label>
+            </div>
+            <div class="control-row">
+              <span class="control-state-label">Disabled</span>
+              <input type="${inputType}" class="${className}-input" id="${type}_dis" disabled>
+              <label for="${type}_dis" class="${className}-label"></label>
+            </div>
+            <div class="control-row">
+              <span class="control-state-label">Disabled selected</span>
+              <input type="${inputType}" class="${className}-input" id="${type}_dissel" checked disabled>
+              <label for="${type}_dissel" class="${className}-label"></label>
+            </div>
+          `;
+        };
+
+        const generateSwitchHTML = () => `
+          <div class="control-row">
+            <span class="control-state-label">Off</span>
+            <input type="checkbox" class="switch-input" id="sw_off">
+            <label for="sw_off" class="switch-label"></label>
+          </div>
+          <div class="control-row">
+            <span class="control-state-label">On</span>
+            <input type="checkbox" class="switch-input" id="sw_on" checked>
+            <label for="sw_on" class="switch-label"></label>
+          </div>
+          <div class="control-row">
+            <span class="control-state-label">Disabled off</span>
+            <input type="checkbox" class="switch-input" id="sw_disoff" disabled>
+            <label for="sw_disoff" class="switch-label"></label>
+          </div>
+          <div class="control-row">
+            <span class="control-state-label">Disabled on</span>
+            <input type="checkbox" class="switch-input" id="sw_dison" checked disabled>
+            <label for="sw_dison" class="switch-label"></label>
+          </div>
+        `;
+
+        demoContainer.innerHTML = `
+          <div class="demo-card">
+            <div class="demo-title">Variants</div>
+            <div class="variant-tabs">
+              <button type="button" class="variant-tab active" data-variant="checkbox">Checkbox</button>
+              <button type="button" class="variant-tab" data-variant="radio">Radio</button>
+              <button type="button" class="variant-tab" data-variant="switch">Switch</button>
+            </div>
+            <div class="variant-description" id="variant-description">${variantDescriptions.checkbox}</div>
+
+            <div id="variant-checkbox" class="variant-content">
+              <div class="mobile-preview mobile-preview-small">
+                <div class="component-container" style="gap: 24px;">
+                  ${generateCheckboxHTML('checkbox')}
+                </div>
+              </div>
+            </div>
+            <div id="variant-radio" class="variant-content" style="display:none;">
+              <div class="mobile-preview mobile-preview-small">
+                <div class="component-container" style="gap: 24px;">
+                  ${generateCheckboxHTML('radio')}
+                </div>
+              </div>
+            </div>
+            <div id="variant-switch" class="variant-content" style="display:none;">
+              <div class="mobile-preview mobile-preview-small">
+                <div class="component-container" style="gap: 24px;">
+                  ${generateSwitchHTML()}
+                </div>
+              </div>
+            </div>
+
+            <div class="tabs" style="margin-top: var(--space-24);">
+              <button type="button" class="tab active" data-tab="design">Дизайн</button>
+              <button type="button" class="tab" data-tab="code">Код</button>
+            </div>
+            <div id="tab-design" class="tab-content">
+              <p style="font-size:14px; margin-top:16px;">Чекбокс: скругление 6px. Радио: обводка 1px, при включении обводка и точка зелёные.</p>
+            </div>
+            <div id="tab-code" class="tab-content" style="display:none;">
+              <div class="code-block">${highlightedCode(
+                '<!-- Checkbox -->\n<input type="checkbox" class="checkbox-input" id="cb1">\n<label for="cb1" class="checkbox-label"></label>\n\n<!-- Radio -->\n<input type="radio" class="radio-input" id="rb1">\n<label for="rb1" class="radio-label"></label>\n\n<!-- Switch -->\n<input type="checkbox" class="switch-input" id="sw1">\n<label for="sw1" class="switch-label"></label>'
+              )}</div>
+            </div>
+          </div>
+        `;
+
+        const variantTabs = document.querySelectorAll('.variant-tab');
+        const variantDesc = document.getElementById('variant-description');
+        variantTabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const variant = tab.dataset.variant;
+            variantTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.querySelectorAll('.variant-content').forEach(el => el.style.display = 'none');
+            document.getElementById('variant-' + variant).style.display = 'block';
+            if (variantDesc) variantDesc.textContent = variantDescriptions[variant] || '';
+          });
+        });
+
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const tabName = tab.dataset.tab;
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById('tab-design').style.display = tabName === 'design' ? 'block' : 'none';
+            document.getElementById('tab-code').style.display = tabName === 'code' ? 'block' : 'none';
+          });
+        });
+
+        // Принудительно открываем первый вариант (Checkbox)
+        const firstTab = document.querySelector('#demo-container .variant-tab');
+        if (firstTab) {
+          firstTab.click();
+        }
+      },
+
+      // ----- TAB BAR -----
+      tabbar: () => {
+        componentTitle.textContent = 'Tab Bar';
+        componentDescription.textContent = 'Табы. Используются для переключения между разделами внутри одной страницы, например, между историей операций, информацией о счёте и реквизитами. Активный таб выделяется подчёркиванием и зелёным цветом.';
+
+        demoContainer.innerHTML = `
+          <div class="demo-card">
+            <div class="demo-title">Playground</div>
+            <div class="mobile-preview mobile-preview-wide" style="padding: var(--space-24);">
+              <div class="tab-bar">
+                <button class="tab-item active">Главная</button>
+                <button class="tab-item">История</button>
+                <button class="tab-item">Лимиты</button>
+                <button class="tab-item">Реквизиты</button>
+              </div>
+            </div>
+
+            <div class="tabs" style="margin-top: var(--space-24);">
+              <button type="button" class="tab active" data-tab="design">Дизайн</button>
+              <button type="button" class="tab" data-tab="code">Код</button>
+            </div>
+            <div id="tab-design" class="tab-content">
+              <p style="font-size:14px; margin-top:16px;">Табы с подчёркиванием. Шрифт 16px regular, расстояние 30px. Линия непосредственно под текстом.</p>
+            </div>
+            <div id="tab-code" class="tab-content" style="display:none;">
+              <div class="code-block">${highlightedCode(
+                '<!-- Tab Bar -->\n<div class="tab-bar">\n  <button class="tab-item active">Главная</button>\n  <button class="tab-item">История</button>\n  <button class="tab-item">Лимиты</button>\n  <button class="tab-item">Реквизиты</button>\n</div>'
+              )}</div>
+            </div>
+          </div>
+        `;
+
+        const tabButtons = document.querySelectorAll('.tab-item');
+        tabButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            tabButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+          });
+        });
+
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const tabName = tab.dataset.tab;
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById('tab-design').style.display = tabName === 'design' ? 'block' : 'none';
+            document.getElementById('tab-code').style.display = tabName === 'code' ? 'block' : 'none';
+          });
+        });
+      },
+
+      // ----- PRODUCT SELECT -----
+      'product-select': () => {
+        componentTitle.textContent = 'Product Select';
+        componentDescription.textContent = 'Поле выбора продукта для экранов платежей и переводов.';
+
+        demoContainer.innerHTML = `
+          <div class="demo-card">
+            <div class="demo-title">Playground</div>
+            <div class="mobile-preview mobile-preview-small">
+              <div class="product-select-wrapper">
+                <div class="product-select-label">Списать с</div>
+                <div class="product-select" id="productSelect">
+                  <div class="icon">₽</div>
+                  <div class="info">
+                    <div class="name">Счет в рублях *1414</div>
+                    <div class="amount">13 000<span class="kopecks">,00</span> ₽</div>
+                  </div>
+                  <div class="arrow">
+                    <svg viewBox="0 0 12 8">
+                      <path d="M2 1 L10 1 L6 7 Z"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="states-panel">
+              <button class="state-btn active" data-state="default">Default</button>
+              <button class="state-btn" data-state="focus">Focus</button>
+              <button class="state-btn" data-state="error">Error</button>
+              <button class="state-btn" data-state="disabled">Disabled</button>
+            </div>
+
+            <div class="tabs" style="margin-top: var(--space-24);">
+              <button type="button" class="tab active" data-tab="design">Дизайн</button>
+              <button type="button" class="tab" data-tab="code">Код</button>
+            </div>
+            <div id="tab-design" class="tab-content">
+              <p style="font-size:14px; margin-top:16px;">Плашка 328×64px, белый фон, обводка divider 1px, радиус 6px. Иконка 32×32 (зелёный круг, белый символ). Текст: название счета 12 regular primary, сумма 20 medium (рубли primary, копейки disabled). Стрелка справа 24×24, цвет divider. Отступы: 16px по бокам, 9px сверху/снизу. Подпись сверху 14 regular disabled, отступ 4px. Состояния: default, focus (обводка primary), error (обводка error), disabled (фон disabled).</p>
+            </div>
+            <div id="tab-code" class="tab-content" style="display:none;">
+              <div class="code-block">${highlightedCode(
+                '<!-- Product Select -->\n<div class="product-select-wrapper">\n  <div class="product-select-label">Списать с</div>\n  <div class="product-select">\n    <div class="icon">₽</div>\n    <div class="info">\n      <div class="name">Счет в рублях *1414</div>\n      <div class="amount">13 000<span class="kopecks">,00</span> ₽</div>\n    </div>\n    <div class="arrow">\n      <svg viewBox="0 0 12 8">\n        <path d="M2 1 L10 1 L6 7 Z"/>\n      </svg>\n    </div>\n  </div>\n</div>'
+              )}</div>
+            </div>
+          </div>
+        `;
+
+        // Переключение состояний
+        const stateBtns = document.querySelectorAll('.state-btn');
+        const productSelect = document.getElementById('productSelect');
+
+        stateBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            stateBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            productSelect.classList.remove('focus', 'error', 'disabled');
+            productSelect.style.borderColor = '';
+            productSelect.style.backgroundColor = '';
+
+            const state = btn.dataset.state;
+            if (state === 'focus') {
+              productSelect.classList.add('focus');
+            } else if (state === 'error') {
+              productSelect.classList.add('error');
+            } else if (state === 'disabled') {
+              productSelect.classList.add('disabled');
+            }
+          });
+        });
+
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const tabName = tab.dataset.tab;
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById('tab-design').style.display = tabName === 'design' ? 'block' : 'none';
+            document.getElementById('tab-code').style.display = tabName === 'code' ? 'block' : 'none';
+          });
+        });
+      },
+
+      // ----- DROPDOWNS -----
+      dropdowns: () => {
+        componentTitle.textContent = 'Dropdowns';
+        componentDescription.textContent = 'Выпадающие списки для выбора продукта, банка или периода.';
+
+        demoContainer.innerHTML = `
+          <div class="demo-card">
+            <div class="demo-title">Playground</div>
+            <div class="variant-tabs">
+              <button type="button" class="variant-tab active" data-variant="product">Product</button>
+              <button type="button" class="variant-tab" data-variant="icon-text">Icon+Text</button>
+              <button type="button" class="variant-tab" data-variant="text">Text</button>
+            </div>
+
+            <!-- Product Dropdown -->
+            <div id="variant-product" class="variant-content active">
+              <div class="mobile-preview mobile-preview-small">
+                <div class="dropdown-wrapper">
+                  <div class="dropdown-field" id="productSelectDropdown">
+                    <div class="icon">₽</div>
+                    <div class="info">
+                      <div class="name">Счет в рублях *1414</div>
+                      <div class="amount">13 000<span class="kopecks">,00</span> <span class="currency">₽</span></div>
+                    </div>
+                    <div class="arrow">
+                      <svg viewBox="0 0 12 8">
+                        <path d="M2 1 L10 1 L6 7 Z"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="dropdown-content" id="productDropdown">
+                    <div class="dropdown-list">
+                      <div class="dropdown-item-product">
+                        <div class="icon">₽</div>
+                        <div class="info">
+                          <div class="name">Счет в рублях *1414</div>
+                          <div class="amount">13 000<span class="kopecks">,00</span> <span class="currency">₽</span></div>
+                        </div>
+                      </div>
+                      <div class="dropdown-item-product">
+                        <div class="icon">₽</div>
+                        <div class="info">
+                          <div class="name">Счет в рублях *1414</div>
+                          <div class="amount">13 000<span class="kopecks">,00</span> <span class="currency">₽</span></div>
+                        </div>
+                      </div>
+                      <div class="dropdown-item-product">
+                        <div class="icon">₽</div>
+                        <div class="info">
+                          <div class="name">Счет в рублях *1414</div>
+                          <div class="amount">13 000<span class="kopecks">,00</span> <span class="currency">₽</span></div>
+                        </div>
+                      </div>
+                      <div class="dropdown-item-product">
+                        <div class="icon">₽</div>
+                        <div class="info">
+                          <div class="name">Счет в рублях *1414</div>
+                          <div class="amount">13 000<span class="kopecks">,00</span> <span class="currency">₽</span></div>
+                        </div>
+                      </div>
+                      <div class="dropdown-item-product">
+                        <div class="icon">₽</div>
+                        <div class="info">
+                          <div class="name">Счет в рублях *1414</div>
+                          <div class="amount">13 000<span class="kopecks">,00</span> <span class="currency">₽</span></div>
+                        </div>
+                      </div>
+                      <div class="dropdown-item-product">
+                        <div class="icon">₽</div>
+                        <div class="info">
+                          <div class="name">Счет в рублях *1414</div>
+                          <div class="amount">13 000<span class="kopecks">,00</span> <span class="currency">₽</span></div>
+                        </div>
+                      </div>
+                      <div class="dropdown-item-product">
+                        <div class="icon">₽</div>
+                        <div class="info">
+                          <div class="name">Счет в рублях *1414</div>
+                          <div class="amount">13 000<span class="kopecks">,00</span> <span class="currency">₽</span></div>
+                        </div>
+                      </div>
+                      <div class="dropdown-item-product">
+                        <div class="icon">₽</div>
+                        <div class="info">
+                          <div class="name">Счет в рублях *1414</div>
+                          <div class="amount">13 000<span class="kopecks">,00</span> <span class="currency">₽</span></div>
+                        </div>
+                      </div>
+                      <div class="dropdown-item-product">
+                        <div class="icon">₽</div>
+                        <div class="info">
+                          <div class="name">Счет в рублях *1414</div>
+                          <div class="amount">13 000<span class="kopecks">,00</span> <span class="currency">₽</span></div>
+                        </div>
+                      </div>
+                      <div class="dropdown-item-product">
+                        <div class="icon">₽</div>
+                        <div class="info">
+                          <div class="name">Счет в рублях *1414</div>
+                          <div class="amount">13 000<span class="kopecks">,00</span> <span class="currency">₽</span></div>
+                        </div>
+                      </div>
+                      <div class="dropdown-item-product">
+                        <div class="icon">₽</div>
+                        <div class="info">
+                          <div class="name">Счет в рублях *1414</div>
+                          <div class="amount">13 000<span class="kopecks">,00</span> <span class="currency">₽</span></div>
+                        </div>
+                      </div>
+                      <div class="dropdown-item-product">
+                        <div class="icon">₽</div>
+                        <div class="info">
+                          <div class="name">Счет в рублях *1414</div>
+                          <div class="amount">13 000<span class="kopecks">,00</span> <span class="currency">₽</span></div>
+                        </div>
+                      </div>
+                      <div class="dropdown-item-product">
+                        <div class="icon">$</div>
+                        <div class="info">
+                          <div class="name">Счет в долларах *1532</div>
+                          <div class="amount">2 241<span class="kopecks">,00</span> <span class="currency">$</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Icon+Text Dropdown -->
+            <div id="variant-icon-text" class="variant-content">
+              <div class="mobile-preview mobile-preview-small">
+                <div class="dropdown-wrapper">
+                  <div class="dropdown-icon-text-field" id="iconTextSelect">
+                    <div class="placeholder">Выберите банк</div>
+                    <div class="arrow">
+                      <svg viewBox="0 0 12 8">
+                        <path d="M2 1 L10 1 L6 7 Z"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="dropdown-content" id="iconTextDropdown">
+                    <div class="dropdown-list">
+                      <div class="dropdown-item-icon-text">
+                        <div class="icon" style="background: #333; color: #fff; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center;">П</div>
+                        <div class="text">Почта Банк</div>
+                      </div>
+                      <div class="dropdown-item-icon-text">
+                        <div class="icon" style="background: #ffcc00; color: #000; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center;">Т</div>
+                        <div class="text">Тинькофф Банк</div>
+                      </div>
+                      <div class="dropdown-item-icon-text">
+                        <div class="icon" style="background: #009688; color: #fff; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center;">С</div>
+                        <div class="text">Сбербанк</div>
+                      </div>
+                      <div class="dropdown-item-icon-text">
+                        <div class="icon" style="background: #f37021; color: #fff; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center;">А</div>
+                        <div class="text">Альфа-Банк</div>
+                      </div>
+                      <div class="dropdown-item-icon-text">
+                        <div class="icon" style="background: #4a90e2; color: #fff; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center;">В</div>
+                        <div class="text">ВТБ</div>
+                      </div>
+                      <div class="dropdown-item-icon-text">
+                        <div class="icon" style="background: #e91e63; color: #fff; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center;">Р</div>
+                        <div class="text">Райффайзенбанк</div>
+                      </div>
+                      <div class="dropdown-item-icon-text">
+                        <div class="icon" style="background: #2196f3; color: #fff; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center;">Г</div>
+                        <div class="text">Газпромбанк</div>
+                      </div>
+                      <div class="dropdown-item-icon-text">
+                        <div class="icon" style="background: #ff9800; color: #fff; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center;">М</div>
+                        <div class="text">МКБ</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Text Dropdown -->
+            <div id="variant-text" class="variant-content">
+              <div class="mobile-preview mobile-preview-small">
+                <div class="dropdown-wrapper">
+                  <div class="dropdown-text-field" id="textSelect">
+                    <div class="placeholder">Выберите период</div>
+                    <div class="arrow">
+                      <svg viewBox="0 0 12 8">
+                        <path d="M2 1 L10 1 L6 7 Z"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="dropdown-content" id="textDropdown">
+                    <div class="dropdown-list">
+                      <div class="dropdown-item-text"><div class="text">Январь</div></div>
+                      <div class="dropdown-item-text"><div class="text">Февраль</div></div>
+                      <div class="dropdown-item-text"><div class="text">Март</div></div>
+                      <div class="dropdown-item-text"><div class="text">Апрель</div></div>
+                      <div class="dropdown-item-text"><div class="text">Май</div></div>
+                      <div class="dropdown-item-text"><div class="text">Июнь</div></div>
+                      <div class="dropdown-item-text"><div class="text">Июль</div></div>
+                      <div class="dropdown-item-text"><div class="text">Август</div></div>
+                      <div class="dropdown-item-text"><div class="text">Сентябрь</div></div>
+                      <div class="dropdown-item-text"><div class="text">Октябрь</div></div>
+                      <div class="dropdown-item-text"><div class="text">Ноябрь</div></div>
+                      <div class="dropdown-item-text"><div class="text">Декабрь</div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tabs" style="margin-top: var(--space-24);">
+              <button type="button" class="tab active" data-tab="design">Дизайн</button>
+              <button type="button" class="tab" data-tab="code">Код</button>
+            </div>
+            <div id="tab-design" class="tab-content">
+              <p style="font-size:14px; margin-top:16px;">Выпадающие списки: ширина 328px, фон белый, бордер 1px divider, радиус 6px, тень 0 4 16 rgba(0,0,0,0.08). Справа 20px под скролл (полоска 4×32, скруглённая). Высота дропдауна 200px. Отступ последней плашки до края дропдауна — 4px. Иконки в зелёных кругах отцентрованы. Стрелка справа во всех полях (ширина 12px, цвет divider). Внутренние отступы слева в плашках — 16px. Все селекты высотой 64px. Валюта окрашена в цвет копеек.</p>
+            </div>
+            <div id="tab-code" class="tab-content" style="display:none;">
+              <div class="code-block">${highlightedCode(
+                '<!-- Dropdown wrapper -->\n<div class="dropdown-wrapper">\n  <!-- Product Select Field -->\n  <div class="dropdown-field">\n    <div class="icon">₽</div>\n    <div class="info">...\n    </div>\n    <div class="arrow">...</div>\n  </div>\n  <div class="dropdown-content">\n    <div class="dropdown-list">\n      <div class="dropdown-item-product">...</div>\n      <div class="dropdown-item-product">...</div>\n      <div class="dropdown-item-product">...</div>\n    </div>\n  </div>\n</div>'
+              )}</div>
+            </div>
+          </div>
+        `;
+
+        // Product Dropdown Logic
+        const productSelectDropdown = document.getElementById('productSelectDropdown');
+        const productDropdown = document.getElementById('productDropdown');
+        const productItems = productDropdown.querySelectorAll('.dropdown-item-product');
+
+        function closeDropdowns() {
+          document.querySelectorAll('.dropdown-content.open').forEach(d => d.classList.remove('open'));
+          document.querySelectorAll('.dropdown-field.open, .dropdown-icon-text-field.open, .dropdown-text-field.open').forEach(f => f.classList.remove('open'));
+        }
+
+        productSelectDropdown.addEventListener('click', () => {
+          closeDropdowns();
+          productSelectDropdown.classList.toggle('open');
+          productDropdown.classList.toggle('open');
+        });
+
+        productItems.forEach(item => {
+          item.addEventListener('click', () => {
+            item.style.backgroundColor = 'var(--color-disabled-bg)';
+            setTimeout(() => {
+              item.style.backgroundColor = '';
+            }, 150);
+            closeDropdowns();
+          });
+        });
+
+        // Icon+Text Dropdown Logic
+        const iconTextSelect = document.getElementById('iconTextSelect');
+        const iconTextDropdown = document.getElementById('iconTextDropdown');
+        const iconTextItems = iconTextDropdown.querySelectorAll('.dropdown-item-icon-text');
+
+        iconTextSelect.addEventListener('click', () => {
+          closeDropdowns();
+          iconTextSelect.classList.toggle('open');
+          iconTextDropdown.classList.toggle('open');
+        });
+
+        iconTextItems.forEach(item => {
+          item.addEventListener('click', () => {
+            const icon = item.querySelector('.icon').cloneNode(true);
+            const text = item.querySelector('.text').textContent;
+            
+            iconTextSelect.innerHTML = '';
+            iconTextSelect.appendChild(icon);
+            const textSpan = document.createElement('span');
+            textSpan.className = 'text';
+            textSpan.textContent = text;
+            iconTextSelect.appendChild(textSpan);
+            const arrow = document.createElement('div');
+            arrow.className = 'arrow';
+            arrow.innerHTML = `
+              <svg viewBox="0 0 12 8">
+                <path d="M2 1 L10 1 L6 7 Z"/>
+              </svg>
+            `;
+            iconTextSelect.appendChild(arrow);
+            closeDropdowns();
+          });
+        });
+
+        // Text Dropdown Logic
+        const textSelect = document.getElementById('textSelect');
+        const textDropdown = document.getElementById('textDropdown');
+        const textItems = textDropdown.querySelectorAll('.dropdown-item-text');
+
+        textSelect.addEventListener('click', () => {
+          closeDropdowns();
+          textSelect.classList.toggle('open');
+          textDropdown.classList.toggle('open');
+        });
+
+        textItems.forEach(item => {
+          item.addEventListener('click', () => {
+            const text = item.querySelector('.text').textContent;
+            
+            textSelect.innerHTML = '';
+            const textSpan = document.createElement('span');
+            textSpan.className = 'text';
+            textSpan.textContent = text;
+            textSelect.appendChild(textSpan);
+            const arrow = document.createElement('div');
+            arrow.className = 'arrow';
+            arrow.innerHTML = `
+              <svg viewBox="0 0 12 8">
+                <path d="M2 1 L10 1 L6 7 Z"/>
+              </svg>
+            `;
+            textSelect.appendChild(arrow);
+            closeDropdowns();
+          });
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!e.target.closest('.dropdown-wrapper')) {
+            closeDropdowns();
+          }
+        });
+
+        // Variant tabs switching
+        const variantTabs = document.querySelectorAll('.variant-tab');
+        variantTabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const variant = tab.dataset.variant;
+            variantTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.querySelectorAll('.variant-content').forEach(el => el.classList.remove('active'));
+            document.getElementById('variant-' + variant).classList.add('active');
+            closeDropdowns();
+          });
+        });
+
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const tabName = tab.dataset.tab;
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById('tab-design').style.display = tabName === 'design' ? 'block' : 'none';
+            document.getElementById('tab-code').style.display = tabName === 'code' ? 'block' : 'none';
+          });
+        });
+      },
+
+      // ----- MODALS -----
+      modals: () => {
+        componentTitle.textContent = 'Modals';
+        componentDescription.textContent = 'Модальные окна и драйверы для подтверждения действий, выбора и навигации.';
+
+        function closeAll() {
+          document.querySelectorAll('.modal-overlay, .driver-sheet').forEach(el => {
+            el.classList.remove('open');
+          });
+        }
+
+        demoContainer.innerHTML = `
+          <div class="demo-card">
+            <div class="demo-title">Variants</div>
+            <div class="variant-tabs">
+              <button type="button" class="variant-tab active" data-variant="modal">Modal</button>
+              <button type="button" class="variant-tab" data-variant="driver">Driver</button>
+            </div>
+            <div class="variant-description" id="variant-description">Обычное модальное окно с кнопками. Ширина 328px, отступы 16/24. Нажмите на таб, чтобы открыть.</div>
+            
+            <div class="modal-overlay" id="modalOverlay"></div>
+            <div class="driver-sheet" id="driverSheet"></div>
+          </div>
+        `;
+
+        function renderModalContent() {
+          const overlay = document.getElementById('modalOverlay');
+          overlay.innerHTML = `
+            <div class="modal">
+              <div class="modal-icon-wrapper">
+                <div class="warning-icon">!</div>
+              </div>
+              <div class="modal-title">Внимание!</div>
+              <div class="modal-text">Вы действительно хотите удалить подписку?</div>
+              <div class="modal-actions-row">
+                <button class="modal-btn secondary close-all">Нет</button>
+                <button class="modal-btn primary close-all">Да</button>
+              </div>
+            </div>
+          `;
+          overlay.querySelectorAll('.close-all').forEach(btn => {
+            btn.addEventListener('click', closeAll);
+          });
+          overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closeAll();
+          });
+        }
+
+        function renderDriverContent() {
+          const sheet = document.getElementById('driverSheet');
+          sheet.innerHTML = `
+            <div class="driver-title">Новый продукт</div>
+            <div class="driver-list">
+              <button class="driver-item close-all">
+                <span class="driver-item-icon">💳</span> Выпустить карту
+              </button>
+              <button class="driver-item close-all">
+                <span class="driver-item-icon">💰</span> Взять кредит
+              </button>
+              <button class="driver-item close-all">
+                <span class="driver-item-icon">📈</span> Открыть вклад
+              </button>
+              <button class="driver-item close-all">
+                <span class="driver-item-icon">🏠</span> Открыть накопительный счет
+              </button>
+              <button class="driver-item close-all">
+                <span class="driver-item-icon">⚜️</span> Открыть металлический счёт
+              </button>
+              <button class="driver-item close-all">
+                <span class="driver-item-icon">💳</span> Открыть счет
+              </button>
+            </div>
+          `;
+          sheet.querySelectorAll('.close-all').forEach(btn => {
+            btn.addEventListener('click', closeAll);
+          });
+        }
+
+        renderModalContent();
+        renderDriverContent();
+
+        const variantTabs = document.querySelectorAll('.variant-tab');
+        const variantDesc = document.getElementById('variant-description');
+
+        function switchVariant(variant) {
+          closeAll();
+          if (variant === 'modal') {
+            variantDesc.textContent = 'Обычное модальное окно с кнопками. Ширина 328px, отступы 16/24.';
+            document.getElementById('modalOverlay').classList.add('open');
+          } else {
+            variantDesc.textContent = 'Навигационный драйвер. Ширина 328px, скругления сверху 16px, отступы 16/24.';
+            document.getElementById('driverSheet').classList.add('open');
+          }
+        }
+
+        variantTabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const variant = tab.dataset.variant;
+            variantTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            switchVariant(variant);
+          });
+        });
+
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const tabName = tab.dataset.tab;
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById('tab-design').style.display = tabName === 'design' ? 'block' : 'none';
+            document.getElementById('tab-code').style.display = tabName === 'code' ? 'block' : 'none';
+          });
+        });
+
+        // Принудительно открываем первый вариант (Modal)
+        const firstTab = document.querySelector('#demo-container .variant-tab');
+        if (firstTab) {
+          firstTab.click();
+        }
+      },
+
+      default: (name) => {
+        componentTitle.textContent = name || 'Component';
+        componentDescription.textContent = 'Описание появится позже.';
+        demoContainer.innerHTML = `<div class="demo-card"><p>Компонент в разработке</p></div>`;
+      }
+    };
+
+    function loadComponent(componentId) {
+      document.querySelectorAll('.modal-overlay, .driver-sheet').forEach(el => {
+        el.classList.remove('open');
+      });
+
+      navItems.forEach(item => item.classList.remove('active'));
+      const activeNav = document.querySelector(`.nav-item[data-component="${componentId}"]`);
+      if (activeNav) activeNav.classList.add('active');
+      
+      if (renderers[componentId]) {
+        renderers[componentId]();
+      } else {
+        renderers.default(componentId);
+      }
+    }
+
+    navItems.forEach(item => {
+      item.addEventListener('click', () => loadComponent(item.dataset.component));
+    });
+
+    // При загрузке страницы открываем Dropdowns
+    loadComponent('dropdowns');
+  })();
+</script>
+</body>
+</html>
